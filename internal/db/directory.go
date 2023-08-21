@@ -15,7 +15,7 @@ type Dir struct {
 func NewDir(path string) *Dir {
 	return &Dir{
 		path:         path,
-		score:        1,
+		score:        0,
 		lastAccessed: time.Now().Unix(),
 	}
 }
@@ -42,5 +42,10 @@ func (d *Dir) Rank() int {
 func (d *Dir) GreaterThan(o *Dir) bool {
 	return d.Rank() > o.Rank() ||
 		(d.Rank() == o.Rank() && d.lastAccessed > o.lastAccessed)
+}
 
+func (d *Dir) Equals(o *Dir) bool {
+	return d.score == o.score &&
+		d.lastAccessed == o.lastAccessed &&
+		d.path == o.path
 }

@@ -1,4 +1,4 @@
-package serial
+package serialization
 
 import (
 	"bytes"
@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/harryalaw/elmer/db"
+	"github.com/harryalaw/elmer/internal/db"
 )
 
 func WriteDb(db *db.Db, filepath string) error {

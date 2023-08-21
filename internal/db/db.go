@@ -14,6 +14,11 @@ func FromDirs(dirs []Dir) *Db {
 	return &Db{dirs: dirs}
 }
 
+func (db *Db) AddDir(dir *Dir) *Db {
+	db.dirs = append(db.dirs, *dir)
+	return db
+}
+
 func (db *Db) Equals(o *Db) bool {
 	if len(db.dirs) != len(o.dirs) {
 		return false
@@ -26,6 +31,17 @@ func (db *Db) Equals(o *Db) bool {
 		}
 	}
 	return true
+}
+
+func (db *Db) Use(dir *Dir) {
+	updatedDirs := make([]Dir, len(db.dirs))
+	for i, dbDir := range db.dirs {
+		if dbDir.Equals(dir) {
+			dbDir.Use()
+		}
+		updatedDirs[i] = dbDir
+	}
+	db.dirs = updatedDirs
 }
 
 func (db *Db) Find(path string) *Dir {

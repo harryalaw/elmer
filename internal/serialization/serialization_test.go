@@ -1,10 +1,10 @@
-package serial
+package serialization
 
 import (
 	"os"
 	"testing"
 
-	"github.com/harryalaw/elmer/db"
+	"github.com/harryalaw/elmer/internal/db"
 )
 
 func TestSerialization(t *testing.T) {
