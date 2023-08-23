@@ -8,11 +8,10 @@ import (
 
 func TestAddCommandExisting(t *testing.T) {
 	dirB := db.NewDir("/foo/bar")
-	db := db.FromDirs([]db.Dir{*dirB})
+	database := db.FromDirs([]db.Dir{*dirB})
 
-	cmd := AddCommand("bar", db)
+	updatedDb, err := add("/foo/bar", database)
 
-	updatedDb, err := cmd.Exec()
 	if err != nil {
 		t.Fatalf("Err not nil, got: %+v\n", err)
 	}
@@ -25,11 +24,10 @@ func TestAddCommandExisting(t *testing.T) {
 
 func TestAddCommandNewDir(t *testing.T) {
 	dirB := db.NewDir("/foo/bar")
-	db := db.FromDirs([]db.Dir{*dirB})
+	database := db.FromDirs([]db.Dir{*dirB})
 
-	cmd := AddCommand("/foo/yargh", db)
+	updatedDb, err := add("/foo/yargh", database)
 
-	updatedDb, err := cmd.Exec()
 	if err != nil {
 		t.Fatalf("Err not nil, got: %+v\n", err)
 	}

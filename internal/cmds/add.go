@@ -4,24 +4,32 @@ import (
 	"github.com/harryalaw/elmer/internal/db"
 )
 
-func AddCommand(pathName string, db *db.Db) *Command {
-	return &Command{
-		Name: "Add",
-		Args: []string{pathName},
-		Exec: add(pathName, db),
+type Add struct {
+	path string
+}
+
+func AddCommand(pathName string) *Add {
+	return &Add{
+		path: pathName,
 	}
 }
 
-func add(pathName string, database *db.Db) func() (*db.Db, error) {
-	return func() (*db.Db, error) {
-		dir := database.Find(pathName)
-		if dir == nil {
-			dir = db.NewDir(pathName)
-			database = database.AddDir(dir)
-		}
+func (a *Add) Exec() error {
+	// get the db from the file
+	// add or update our thing
 
-		database.Use(dir)
+	// save the db
+	return nil
+}
 
-		return database, nil
+func add(pathName string, database *db.Db) (*db.Db, error) {
+	dir := database.Find(pathName)
+	if dir == nil {
+		dir = db.NewDir(pathName)
+		database = database.AddDir(dir)
 	}
+
+	database.Use(dir)
+
+	return database, nil
 }

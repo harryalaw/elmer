@@ -5,6 +5,7 @@ import (
 	"encoding/gob"
 	"fmt"
 	"os"
+	"strings"
 
 	"github.com/harryalaw/elmer/internal/db"
 )
@@ -15,9 +16,19 @@ func WriteDb(db *db.Db, filepath string) error {
 	enc := gob.NewEncoder(buf)
 	enc.Encode(db)
 
+	dir := parsePath(filepath, "/")
+
+	err := os.MkdirAll(dir, os.ModePerm)
+
+	if err != nil {
+		fmt.Println("Mkdir failed: ", err)
+		return err
+	}
+
 	file, err := os.Create(filepath)
 
 	if err != nil {
+		fmt.Println("Create failed: ", err)
 		return err
 	}
 
@@ -26,6 +37,7 @@ func WriteDb(db *db.Db, filepath string) error {
 	_, err = file.Write(buf.Bytes())
 
 	if err != nil {
+		fmt.Println("Write failed: ", err)
 		return err
 	}
 
@@ -62,4 +74,12 @@ func ImportDb(filepath string) (*db.Db, error) {
 	}
 
 	return &db, nil
+}
+
+func parsePath(filepath string, sep string) string {
+	parts := strings.Split(filepath, sep)
+
+	dir := strings.Join(parts[:len(parts)-1], sep)
+
+	return dir
 }
