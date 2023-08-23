@@ -33,9 +33,15 @@ func parseArgs(args []string) (cmd.Command, error) {
 		return cmd.AddCommand(args[2]), nil
 	case "init":
 		if len(args) != 2 {
-			return nil, fmt.Errorf("Init needs the path for where the file gets made")
+			return nil, fmt.Errorf("init takes no args")
 		}
 		return &cmd.Init{}, nil
+	case "query":
+		if len(args) != 3 {
+			return nil, fmt.Errorf("query needs a value to search for")
+		}
+		return &cmd.Query{Query: args[2]}, nil
+
 	}
 	return nil, fmt.Errorf("No command found for args: %+v\n", args)
 }

@@ -35,6 +35,10 @@ func (d *Dir) PathEnd() string {
 	return parts[len(parts)-1]
 }
 
+func (d *Dir) Path() string {
+	return d.path
+}
+
 func (d *Dir) Rank() int {
 	return d.score
 }
