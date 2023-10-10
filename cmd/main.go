@@ -24,19 +24,15 @@ func parseArgs(args []string) (cmd.Command, error) {
 	if len(args) == 0 {
 		return nil, fmt.Errorf("No arguments provided")
 	}
-
 	switch args[1] {
 	case "add":
-		if len(args) != 3 {
-			return nil, fmt.Errorf("Too many args provided for add")
-		}
-		return cmd.AddCommand(args[2]), nil
-	case "init":
 		if len(args) != 2 {
-			return nil, fmt.Errorf("init takes no args")
+			return nil, fmt.Errorf("Add takes no arguments")
 		}
-		return &cmd.Init{}, nil
-	case "query":
+		return cmd.AddCommand(), nil
+	case "list":
+		return cmd.ListCommand(), nil
+	case "cd":
 		if len(args) != 3 {
 			return nil, fmt.Errorf("query needs a value to search for")
 		}

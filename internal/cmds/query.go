@@ -2,9 +2,9 @@ package cmd
 
 import (
 	"fmt"
-	"os"
+	"os/exec"
 
-	"github.com/harryalaw/elmer/internal/serialization"
+	"github.com/harryalaw/elmer/internal/config"
 )
 
 type Query struct {
@@ -12,20 +12,7 @@ type Query struct {
 }
 
 func (q *Query) Exec() error {
-	dbDir := os.Getenv("ELMER_DIR_PATH")
-
-	if dbDir == "" {
-		homeDir, err := os.UserHomeDir()
-		if err != nil {
-			fmt.Printf("Error getting user's home directory: %v\n", err)
-			return err
-		}
-		dbDir = fmt.Sprintf("%s/%s", homeDir, DEFAULT_DB_DIR)
-	}
-
-	dbFilePath := fmt.Sprintf("%s/%s", dbDir, ELMER_FILE)
-
-	database, err := serialization.ImportDb(dbFilePath)
+	database, err := config.LoadDb()
 	if err != nil {
 		return err
 	}
@@ -35,7 +22,9 @@ func (q *Query) Exec() error {
 	if dir == nil {
 		return fmt.Errorf("No such directory")
 	}
-
 	fmt.Println(dir.Path())
+
+	cd := exec.Command("cd", dir.Path())
+	cd.Run()
 	return nil
 }

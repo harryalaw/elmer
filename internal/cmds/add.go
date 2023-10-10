@@ -1,49 +1,39 @@
 package cmd
 
 import (
-	"fmt"
 	"os"
 
+	"github.com/harryalaw/elmer/internal/config"
 	"github.com/harryalaw/elmer/internal/db"
-	"github.com/harryalaw/elmer/internal/serialization"
 )
 
 type Add struct {
 	path string
 }
 
-func AddCommand(pathName string) *Add {
-	return &Add{
-		path: pathName,
-	}
+func AddCommand() *Add {
+	return &Add{}
 }
 
 func (a *Add) Exec() error {
-	dbDir := os.Getenv("ELMER_DIR_PATH")
-
-	if dbDir == "" {
-		homeDir, err := os.UserHomeDir()
-		if err != nil {
-			fmt.Printf("Error getting user's home directory: %v\n", err)
-			return err
-		}
-		dbDir = fmt.Sprintf("%s/%s", homeDir, DEFAULT_DB_DIR)
-	}
-
-	dbFilePath := fmt.Sprintf("%s/%s", dbDir, ELMER_FILE)
-
-	db, err := serialization.ImportDb(dbFilePath)
-	if err != nil {
-		return err
-	}
-
-	db, err = add(a.path, db)
+	db, err := config.LoadDb()
 
 	if err != nil {
 		return err
 	}
 
-	err = serialization.WriteDb(db, dbFilePath)
+	wd, err := os.Getwd()
+	if err != nil {
+		return err
+	}
+
+	db, err = add(wd, db)
+
+	if err != nil {
+		return err
+	}
+
+	err = config.SaveDb(db)
 	if err != nil {
 		return err
 	}

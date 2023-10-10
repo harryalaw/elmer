@@ -19,6 +19,10 @@ func (db *Db) AddDir(dir *Dir) *Db {
 	return db
 }
 
+func (db *Db) Dirs() []Dir {
+	return db.dirs
+}
+
 func (db *Db) Equals(o *Db) bool {
 	if len(db.dirs) != len(o.dirs) {
 		return false
